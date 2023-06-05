@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css}" />
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css}" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css}" integrity="sha384-3fdgwJw17Bi87e1QQ4fsLn4rUFqWw//KU0g8TvV6quvahISRewev6/EocKNuJmEw" crossorigin="anonymous">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+            <h2 class="navbar-brand">BookStore</h2>
+              <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                  <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/home/{user}(user = ${username})}">Home
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" th:href="@{/order/{username}/{totalQuantity}(username = ${username},totalQuantity = ${totalQuantity})}">Orders List</a>
+                  </li>
+                </ul>
+              </div>
+              <div style="float: right;">
+                <h5 style="display: inline-block;"  th:text="${'Hello, ' + username}"></h5>
+                <a style="display: inline-block;margin-left: 10px;" th:href="@{/viewcart/{username}/(username = ${username})}">
+                    <i class="fas fa-shopping-cart" style="color: aliceblue;"></i>
+                    <span class="rounded-pill badge bg-danger" th:text="${totalQuantity}"></span>
+                </a>
+                <a class="nav-link" th:href="@{/}" style="margin-left: 15px;display:inline-block;color: aliceblue;">Log Out</a>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <aside class="col-lg-3">
+                <div class="card border-primary mb-3" style="max-width: 20rem;">
+                    <div class="card-header">Categories</div>
+                    <div class="card-body">
+                        <ul>
+                            <li><a th:href="@{/{username}/{category}/(username = ${username}, category='Technology')}">Technology</a></li>
+                            <li><a th:href="@{/{username}/{category}/(username = ${username}, category='Adventure')}">Adventure</a></li>
+                            <li><a th:href="@{/{username}/{category}/(username = ${username}, category='Novel')}">Novel</a></li>
+                            <li><a th:href="@{/{username}/{category}/(username = ${username}, category='Detective')}">Detective</a></li>
+                            <li><a th:href="@{/{username}/{category}/(username = ${username}, category='Romance')}">Romance</a></li>
+                            <li><a th:href="@{/{username}/{category}/(username = ${username}, category='Horror')}">Horror</a></li>
+                        </ul>
+                    </div>
+                  </div>
+            </aside>
+            <main class="col-lg-9">
+            	<p id="warn1" style="color: red;"></p>
+                <form class="d-flex" onsubmit="return validateSearch()" th:action="@{/{username}/search/(username = ${username})}" th:method="POST">	
+                    <input class="form-control me-sm-2" type="search" name="searchname" id="search" placeholder="Search">
+                    <select name="category" class="form-control" style="width: 50%;">
+                        <option >All</option>
+                        <option >Technology</option>
+                        <option >Adventure</option>
+                        <option >Novel</option>
+                        <option >Detective</option>
+                        <option >Romance</option>
+                        <option >Horror</option>
+                    </select>
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+                </form>
+
+                <header style="margin-top: 50px;" class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+                    <h3>List Books</h3>
+                </header>
+
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="book: ${books}">
+                        <div class="card" style="margin-top:25px">
+                            <a th:href="@{/detail/{user}/{id}(id=${book.idbook}, user=${username})}">
+                                <img class="card-img-top" th:src="${'data:image/*;base64,'+{book.cover}}" style="height:300px;width:254px"/>
+                            </a>
+                          <div class="card-body">
+                            <h5 class="card-title" th:text="${book.title}"></h5>
+                            <p class="card-text" th:text="${book.price + '$'}"></p>
+                            <form th:method="POST" th:action="@{/addtocart/{username}/{idbook}/(username = ${username}, idbook = ${book.idbook})}" th:object="${bookorder}">
+                                <div style="display:none;">
+                                    <input type="number" value="1" name="quantity" th:field="*{quantity}" class="input-number" data-min="1" data-max="1000"/>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Add to cart</button>
+                                </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script>
+        function validateSearch(){
+            let x = document.getElementById("search").value;
+            let text = "This information must not be blank!!!";
+            if(x === ""){
+            	document.getElementById("warn1").innerHTML = text;
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

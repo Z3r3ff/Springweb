@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Register</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<style>
+p {
+  color: red;
+}
+</style>
+<header>
+	<nav class="navbar navbar-expand-md navbar-dark" style="background-color: Coral">
+                 <div>
+                 		<h2>Book Store Register </h2>
+                 </div>
+                 <br>
+                 <a class="btn btn-success" href="/dislogin" style="margin-right: 150px; margin-left: 1200px;">Log In</a>
+	</nav>
+</header>
+<br>
+ <div class="container col-md-5">
+ 	<div class="card">
+ 		<div class="card-body">
+			<h2>Customer Register Form</h2>
+  			<br>
+  			<form th:object="${user}" th:action="@{register}" th:method="post">
+		   	<fieldset class="form-group">
+		       <label>Username</label> <input type="text" class="form-control" th:value="${user.username}" th:filed="*{username}" name="username">
+		       <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error </p>
+		   	</fieldset>
+		                        
+		   	<fieldset class="form-group"> <label>Password</label> <input type="password" class="form-control" th:value="${user.password}" th:filed="*{password}" name="password">
+		   	 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error </p>
+		   	</fieldset>
+		   	
+		   	<fieldset class="form-group">
+		        <label>Name</label> <input type="text" class="form-control" th:value="${user.name}" th:filed="*{name}" name="name">
+		         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error </p>
+		   	</fieldset>
+		   	
+		   	<fieldset class="form-group">
+		        <label>Age</label> <input type="number" class="form-control" th:value="${user.age}" th:filed="*{age}" name="age">
+		         <p th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error </p>
+		   	</fieldset>
+		   	
+		   	<fieldset class="form-group">
+		        <label>Address</label> <input type="text" class="form-control" th:value="${user.address}" th:filed="*{address}" name="address">
+		         <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error </p>
+		   	</fieldset>
+		   	<p th:if="${error} != null" th:utext="${error}"></p>
+		   	<input type="submit" value="Register" class="btn btn-success" />
+		  </form>
+		</div>
+   </div>
+</div>
+</body>
+</html>

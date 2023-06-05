@@ -1,0 +1,48 @@
+
+.txt-center {
+    text-align: center;
+}
+.hide {
+    display: none;
+}
+
+.clear {
+    float: none;
+    clear: both;
+}
+
+.ratingpls {
+    width: 120px;
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    text-align: center;
+    position: relative;
+}
+
+.ratingpls > label {
+    float: right;
+    display: inline;
+    padding: 0;
+    margin-left: 5px;
+    margin-top: 5px;
+    position: relative;
+    width: 1.1em;
+    cursor: pointer;
+    color: #000;
+}
+
+.ratingpls > label:hover,
+.ratingpls > label:hover ~ label,
+.ratingpls > input.radio-btn:checked ~ label {
+    color: transparent;
+}
+
+.ratingpls > label:hover:before,
+.ratingpls > label:hover ~ label:before,
+.ratingpls > input.radio-btn:checked ~ label:before,
+.ratingpls > input.radio-btn:checked ~ label:before {
+    content: "\2605";
+    position: absolute;
+    left: 0;
+    color: #FFD700;
+}
